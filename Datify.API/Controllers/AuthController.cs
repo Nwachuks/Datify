@@ -16,8 +16,6 @@ namespace Datify.API.Controllers {
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto) {
-            // Validate requests
-
             // Store usernames in lower case to restrict to unique usernames
             userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
