@@ -15,6 +15,9 @@
     <li class="nav-item">
       <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Messages</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" tabindex="-1" aria-disabled="true" (click)="logout()">Logout</a>
+    </li>
     <!-- <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
       <div class="dropdown-menu" aria-labelledby="dropdown01">
@@ -25,7 +28,17 @@
     </li> -->
   </ul>
 
-  <form #loginForm="ngForm" class="form-inline my-2 my-lg-0" (ngSubmit)="login()">
+  <div *ngIf="loggedIn()" class="dropdown">
+    <a class="dropdown-toggle text-light">Welcome User</a>
+
+    <div class="dropdown-menu">
+      <a href="#" class="dropdown-item"><i class="fa fa-user"></i> Edit Profile</a>
+      <div class="dropdown-divider"></div>
+      <a href="#" class="dropdown-item"><i class="fa fa-sign-out"></i> Logout</a>
+    </div>
+  </div>
+
+  <form *ngIf="!loggedIn()" #loginForm="ngForm" class="form-inline my-2 my-lg-0" (ngSubmit)="login()">
     <input class="form-control mr-sm-2" type="text" placeholder="Username"
       name="username" [(ngModel)]="model.username" required>
     <input class="form-control mr-sm-2" type="password" placeholder="Password"
