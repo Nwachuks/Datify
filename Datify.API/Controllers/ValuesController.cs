@@ -16,7 +16,7 @@ namespace Datify.API.Controllers
 
         }
 
-        // Get api/values
+        // Get /values
         [HttpGet]
         public async Task<IActionResult> GetValues()
         {
@@ -25,7 +25,7 @@ namespace Datify.API.Controllers
             return Ok(values);
         }
 
-        // GET api/values/5
+        // GET /values/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetValue(int id)
         {
