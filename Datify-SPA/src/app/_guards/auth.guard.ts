@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    this.alertify.error('Can\'t access');
+    this.alertify.error('Can\'t access except logged in');
     this.router.navigate(['/home']);
     return false;
   }
