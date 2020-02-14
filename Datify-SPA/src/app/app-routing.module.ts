@@ -4,13 +4,21 @@ import { MessagesComponent } from './messages/messages.component';
 import { MatchesListComponent } from './matches-list/matches-list.component';
 import { HomeComponent } from './home/home.component';
 import { LikesListComponent } from './likes-list/likes-list.component';
+import { AuthGuard } from './_guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'matches', component: MatchesListComponent },
-  { path: 'likes', component: LikesListComponent },
-  { path: 'messages', component: MessagesComponent },
-  { path: '**', redirectTo: 'home', pathMatch: 'full' }
+  { path: '', component: HomeComponent },
+  {
+    path: '',
+    runGuardsAndResolvers: 'always',
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'matches', component: MatchesListComponent },
+      { path: 'likes', component: LikesListComponent },
+      { path: 'messages', component: MessagesComponent },
+    ]
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({
