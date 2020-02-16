@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Threading.Tasks;
-using Datify.API.Data;
-using Datify.API.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +17,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Datify.API.Data;
+using Datify.API.Helpers;
+using AutoMapper;
+using Newtonsoft.Json;
 
 namespace Datify.API
 {
@@ -36,8 +38,13 @@ namespace Datify.API
         {
             // Add DbContext for EF
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
             services.AddCors();
+            // Add AutoMapper for returning specified data
+            services.AddAutoMapper(typeof(Startup));
+            // Seed data to database
             services.AddTransient<Seed>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IDatingRepository, DatingRepository>();

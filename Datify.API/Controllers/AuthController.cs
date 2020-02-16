@@ -11,6 +11,7 @@ using Datify.API.Dtos;
 using Datify.API.Models;
 
 namespace Datify.API.Controllers {
+    // receive data from body and validate requests
     [ApiController]
     [Route("[controller]")]
     public class AuthController : ControllerBase {
