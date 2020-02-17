@@ -9,9 +9,10 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
-import { MatchesListComponent } from './matches-list/matches-list.component';
 import { LikesListComponent } from './likes-list/likes-list.component';
 import { MessagesComponent } from './messages/messages.component';
+import { MatchesListComponent } from './matches/matches-list/matches-list.component';
+import { MatchCardComponent } from './matches/match-card/match-card.component';
 
 import { AuthService } from './_services/auth.service';
 import { AlertifyService } from './_services/alertify.service';
@@ -25,6 +26,7 @@ import { AuthGuard } from './_guards/auth.guard';
       HomeComponent,
       RegisterComponent,
       MatchesListComponent,
+      MatchCardComponent,
       LikesListComponent,
       MessagesComponent
    ],

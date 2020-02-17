@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MessagesComponent } from './messages/messages.component';
-import { MatchesListComponent } from './matches-list/matches-list.component';
+import { MatchesListComponent } from './matches/matches-list/matches-list.component';
 import { HomeComponent } from './home/home.component';
 import { LikesListComponent } from './likes-list/likes-list.component';
 import { AuthGuard } from './_guards/auth.guard';
