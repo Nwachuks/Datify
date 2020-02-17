@@ -21,7 +21,9 @@ import { ProfileComponent } from './user/profile/profile.component';
 import { AuthService } from './_services/auth.service';
 import { AlertifyService } from './_services/alertify.service';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
+import { UserService } from './_services/user.service';
 import { AuthGuard } from './_guards/auth.guard';
+import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
 import { MatchDetailResolver } from './_resolvers/match-detail.resolver';
 import { MatchListResolver } from './_resolvers/match-list.resolver';
 import { ProfileResolver } from './_resolvers/profile.resolver';
@@ -61,12 +63,13 @@ export function tokenGetter() {
    providers: [
       AuthService,
       AlertifyService,
+      UserService,
       ErrorInterceptorProvider,
       AuthGuard,
+      PreventUnsavedChangesGuard,
       MatchDetailResolver,
       MatchListResolver,
       ProfileResolver
-      // UserService
    ],
    bootstrap: [
       AppComponent
