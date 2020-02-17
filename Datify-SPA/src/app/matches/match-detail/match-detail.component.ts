@@ -15,15 +15,19 @@ export class MatchDetailComponent implements OnInit {
   constructor(private userService: UserService, private alertify: AlertifyService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.loadUser();
-  }
-
-  loadUser() {
-    this.userService.getUser(+this.route.snapshot.params['id']).subscribe((user: User) => {
-      this.user = user;
-    }, error => {
-      this.alertify.error(error);
+    // this.loadUser();
+    // Use resolvers to load data for user before component is loaded
+    this.route.data.subscribe(data => {
+      this.user = data['user'];
     });
   }
+
+  // loadUser() {
+  //   this.userService.getUser(+this.route.snapshot.params['id']).subscribe((user: User) => {
+  //     this.user = user;
+  //   }, error => {
+  //     this.alertify.error(error);
+  //   });
+  // }
 
 }

@@ -20,6 +20,8 @@ import { AuthService } from './_services/auth.service';
 import { AlertifyService } from './_services/alertify.service';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { AuthGuard } from './_guards/auth.guard';
+import { MatchDetailResolver } from './_resolvers/match-detail.resolver';
+import { MatchListResolver } from './_resolvers/match-list.resolver';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -55,7 +57,9 @@ export function tokenGetter() {
       AuthService,
       AlertifyService,
       ErrorInterceptorProvider,
-      AuthGuard
+      AuthGuard,
+      MatchDetailResolver,
+      MatchListResolver
       // UserService
    ],
    bootstrap: [

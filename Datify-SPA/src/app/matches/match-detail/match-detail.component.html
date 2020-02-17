@@ -1,5 +1,5 @@
 <!-- <p>
-  {{ user?.fullName }}
+  {{ user.fullName }}
 </p> -->
 
 <div class="container mt-5">
@@ -7,23 +7,23 @@
     <!-- General info -->
     <div class="col-sm-4">
       <div class="card">
-        <img src="{{ user?.photoUrl }}" alt="{{ user?.fullName }}" class="card-img-top img-thumbnail">
+        <img src="{{ user.photoUrl }}" alt="{{ user.fullName }}" class="card-img-top img-thumbnail">
         <div class="card-body">
           <div>
             <strong>Location:</strong>
-            <p>{{ user?.city }}, {{ user?.country }}</p>
+            <p>{{ user.city }}, {{ user.country }}</p>
           </div>
           <div>
             <strong>Age:</strong>
-            <p>{{ user?.age }}</p>
+            <p>{{ user.age }}</p>
           </div>
           <div>
             <strong>Last Active:</strong>
-            <p>{{ user?.lastActive }}</p>
+            <p>{{ user.lastActive }}</p>
           </div>
           <div>
             <strong>Member Since:</strong>
-            <p>{{ user?.created }}</p>
+            <p>{{ user.created }}</p>
           </div>
         </div>
         <div class="card-footer">
@@ -38,15 +38,15 @@
     <div class="col-sm-8">
       <div class="tab-panel">
         <tabset class="match-tabset">
-          <tab heading="About {{ user?.username | titlecase }}">
+          <tab heading="About {{ user.username | titlecase }}">
             <h4>Description</h4>
-            <p>{{ user?.introduction }}</p>
+            <p>{{ user.introduction }}</p>
             <h4>Looking For</h4>
-            <p>{{ user?.lookingFor }}</p>
+            <p>{{ user.lookingFor }}</p>
           </tab>
           <tab heading="Interests">
-            <h4>{{ user?.username | titlecase }}'s Interests</h4>
-            <p>{{ user?.interests }}</p>
+            <h4>{{ user.username | titlecase }}'s Interests</h4>
+            <p>{{ user.interests }}</p>
           </tab>
           <tab heading="Photos">
             <p>Photos will go here</p>

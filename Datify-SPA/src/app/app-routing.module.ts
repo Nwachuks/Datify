@@ -6,6 +6,8 @@ import { MatchDetailComponent } from './matches/match-detail/match-detail.compon
 import { HomeComponent } from './home/home.component';
 import { LikesListComponent } from './likes-list/likes-list.component';
 import { AuthGuard } from './_guards/auth.guard';
+import { MatchDetailResolver } from './_resolvers/match-detail.resolver';
+import { MatchListResolver } from './_resolvers/match-list.resolver';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,8 +16,8 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
-      { path: 'matches', component: MatchesListComponent },
-      { path: 'matches/:id', component: MatchDetailComponent },
+      { path: 'matches', component: MatchesListComponent, resolve: { users: MatchListResolver } },
+      { path: 'matches/:id', component: MatchDetailComponent, resolve: { user: MatchDetailResolver } },
       { path: 'likes', component: LikesListComponent },
       { path: 'messages', component: MessagesComponent },
     ]
