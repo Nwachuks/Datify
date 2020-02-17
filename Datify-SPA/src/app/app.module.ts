@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +14,7 @@ import { LikesListComponent } from './likes-list/likes-list.component';
 import { MessagesComponent } from './messages/messages.component';
 import { MatchesListComponent } from './matches/matches-list/matches-list.component';
 import { MatchCardComponent } from './matches/match-card/match-card.component';
+import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
 
 import { AuthService } from './_services/auth.service';
 import { AlertifyService } from './_services/alertify.service';
@@ -31,6 +32,7 @@ export function tokenGetter() {
       RegisterComponent,
       MatchesListComponent,
       MatchCardComponent,
+      MatchDetailComponent,
       LikesListComponent,
       MessagesComponent
    ],
@@ -40,6 +42,7 @@ export function tokenGetter() {
       HttpClientModule,
       FormsModule,
       BsDropdownModule.forRoot(),
+      TabsModule.forRoot(),
       JwtModule.forRoot({
         config: {
           tokenGetter: tokenGetter,

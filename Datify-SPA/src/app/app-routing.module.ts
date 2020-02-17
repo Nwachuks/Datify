@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MessagesComponent } from './messages/messages.component';
 import { MatchesListComponent } from './matches/matches-list/matches-list.component';
+import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
 import { HomeComponent } from './home/home.component';
 import { LikesListComponent } from './likes-list/likes-list.component';
 import { AuthGuard } from './_guards/auth.guard';
@@ -14,6 +15,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'matches', component: MatchesListComponent },
+      { path: 'matches/:id', component: MatchDetailComponent },
       { path: 'likes', component: LikesListComponent },
       { path: 'messages', component: MessagesComponent },
     ]
