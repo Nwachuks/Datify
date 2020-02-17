@@ -16,6 +16,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { MatchesListComponent } from './matches/matches-list/matches-list.component';
 import { MatchCardComponent } from './matches/match-card/match-card.component';
 import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
+import { ProfileComponent } from './user/profile/profile.component';
 
 import { AuthService } from './_services/auth.service';
 import { AlertifyService } from './_services/alertify.service';
@@ -23,6 +24,7 @@ import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { AuthGuard } from './_guards/auth.guard';
 import { MatchDetailResolver } from './_resolvers/match-detail.resolver';
 import { MatchListResolver } from './_resolvers/match-list.resolver';
+import { ProfileResolver } from './_resolvers/profile.resolver';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -37,7 +39,8 @@ export function tokenGetter() {
       MatchCardComponent,
       MatchDetailComponent,
       LikesListComponent,
-      MessagesComponent
+      MessagesComponent,
+      ProfileComponent
    ],
    imports: [
       BrowserModule,
@@ -61,7 +64,8 @@ export function tokenGetter() {
       ErrorInterceptorProvider,
       AuthGuard,
       MatchDetailResolver,
-      MatchListResolver
+      MatchListResolver,
+      ProfileResolver
       // UserService
    ],
    bootstrap: [
