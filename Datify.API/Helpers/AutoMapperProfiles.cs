@@ -28,6 +28,7 @@ namespace Datify.API.Helpers
                 });
             // Map photo collection for each user
             CreateMap<Photo, PhotosForDetailedDto>();
+            CreateMap<UserForUpdateDto, User>();
         }
     }
 }
