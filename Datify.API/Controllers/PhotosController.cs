@@ -14,7 +14,7 @@ using Microsoft.Extensions.Options;
 
 namespace Datify.API.Controllers {
     [Authorize]
-    [Route ("user/{userId}/photos")]
+    [Route ("users/{userId}/photos")]
     [ApiController]
     public class PhotosController : ControllerBase {
         private readonly IDatingRepository _repo;
@@ -40,7 +40,7 @@ namespace Datify.API.Controllers {
         public async Task<IActionResult> GetPhoto(int id) {
             var photoFromRepo = await _repo.GetPhoto(id);
             var photo = _mapper.Map<PhotoForReturnDto>(photoFromRepo);
-            return Ok();
+            return Ok(photo);
         }
 
         [HttpPost]
