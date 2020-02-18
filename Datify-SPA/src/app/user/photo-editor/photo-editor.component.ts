@@ -1,10 +1,10 @@
-import { AlertifyService } from './../../_services/alertify.service';
-import { UserService } from './../../_services/user.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { Photo } from './../../_models/photo';
 import { environment } from './../../../environments/environment';
 import { AuthService } from './../../_services/auth.service';
+import { AlertifyService } from './../../_services/alertify.service';
+import { UserService } from './../../_services/user.service';
 
 @Component({
   selector: 'app-photo-editor',
@@ -13,9 +13,11 @@ import { AuthService } from './../../_services/auth.service';
 })
 export class PhotoEditorComponent implements OnInit {
   @Input() photos: Photo[];
+  @Output() getUserPhotoChange = new EventEmitter<string>();
   uploader: FileUploader;
   hasBaseDropZoneOver = false;
   baseUrl = environment.apiUrl;
+  currentMain: Photo;
 
   constructor(private authService: AuthService, private userService: UserService, private alertify: AlertifyService) { }
 
@@ -56,7 +58,11 @@ export class PhotoEditorComponent implements OnInit {
 
   setMainPhoto(photo: Photo) {
     this.userService.setMainPhoto(this.authService.decodedToken.nameid, photo.id).subscribe(() => {
-      console.log('Successfully set to main');
+      // console.log('Successfully set to main');
+      this.currentMain = this.photos.filter(p => p.isMain === true)[0];
+      this.currentMain.isMain = false;
+      photo.isMain = true;
+      this.getUserPhotoChange.emit(photo.url);
     }, error => {
       this.alertify.error(error);
     });

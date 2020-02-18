@@ -41,4 +41,8 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  updateMainPhoto(photoUrl) {
+    this.user.photoUrl = photoUrl;
+  }
+
 }
