@@ -79,5 +79,35 @@ namespace Datify.API.Controllers {
 
             return BadRequest("Could not add the photo");
         }
+
+        [HttpPost("{id}/setMain")]
+        public async Task<IActionResult> SetMainPhoto(int userId, int id) {
+            // Check if user is authorized
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+                return Unauthorized();
+            }
+            // Get user from repo
+            var user = await _repo.GetUser(userId);
+            // Check if user is updating own photos
+            if (!user.Photos.Any(p => p.Id == id)) {
+                return Unauthorized();
+            }
+            // Get photo from repo
+            var photoFromRepo = await _repo.GetPhoto(id);
+            // Check if photo is main photo
+            if (photoFromRepo.IsMain) {
+                return BadRequest("Photo is already your main photo");
+            }
+            // Get the current main photo from photos and swap is main identity
+            var currentMainPhoto = await _repo.GetMainPhotoForUser(userId);
+            currentMainPhoto.IsMain = false;
+            photoFromRepo.IsMain = true;
+
+            if (await _repo.SaveAll()) {
+                return NoContent();
+            }
+
+            return BadRequest("Could not set photo to main");
+        }
     }
 }
