@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
 import { NgxGalleryModule } from 'ngx-gallery';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import { MatchesListComponent } from './matches/matches-list/matches-list.compon
 import { MatchCardComponent } from './matches/match-card/match-card.component';
 import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
 import { ProfileComponent } from './user/profile/profile.component';
+import { PhotoEditorComponent } from './user/photo-editor/photo-editor.component';
 
 import { AuthService } from './_services/auth.service';
 import { AlertifyService } from './_services/alertify.service';
@@ -32,47 +34,49 @@ export function tokenGetter() {
   return localStorage.getItem('token');
 }
 @NgModule({
-   declarations: [
-      AppComponent,
-      NavComponent,
-      HomeComponent,
-      RegisterComponent,
-      MatchesListComponent,
-      MatchCardComponent,
-      MatchDetailComponent,
-      LikesListComponent,
-      MessagesComponent,
-      ProfileComponent
-   ],
-   imports: [
-      BrowserModule,
-      AppRoutingModule,
-      HttpClientModule,
-      FormsModule,
-      BsDropdownModule.forRoot(),
-      TabsModule.forRoot(),
-      NgxGalleryModule,
-      JwtModule.forRoot({
-        config: {
-          tokenGetter: tokenGetter,
-          whitelistedDomains: ['localhost:3000'],
-          blacklistedRoutes: ['localhost:3000/auth']
-        }
-      })
-   ],
-   providers: [
-      AuthService,
-      AlertifyService,
-      UserService,
-      ErrorInterceptorProvider,
-      AuthGuard,
-      PreventUnsavedChangesGuard,
-      MatchDetailResolver,
-      MatchListResolver,
-      ProfileResolver
-   ],
-   bootstrap: [
-      AppComponent
-   ]
+  declarations: [
+    AppComponent,
+    NavComponent,
+    HomeComponent,
+    RegisterComponent,
+    MatchesListComponent,
+    MatchCardComponent,
+    MatchDetailComponent,
+    LikesListComponent,
+    MessagesComponent,
+    ProfileComponent,
+    PhotoEditorComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
+    NgxGalleryModule,
+    FileUploadModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['localhost:3000'],
+        blacklistedRoutes: ['localhost:3000/auth']
+      }
+    })
+  ],
+  providers: [
+    AuthService,
+    AlertifyService,
+    UserService,
+    ErrorInterceptorProvider,
+    AuthGuard,
+    PreventUnsavedChangesGuard,
+    MatchDetailResolver,
+    MatchListResolver,
+    ProfileResolver
+  ],
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }
