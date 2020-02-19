@@ -116,5 +116,44 @@ namespace Datify.API.Controllers {
 
             return BadRequest("Could not set photo to main");
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePhoto(int userId, int id) {
+            // Check if user is authorized
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+                return Unauthorized();
+            }
+            // Get user from repo
+            var user = await _repo.GetUser(userId);
+            // Check if user is deleting own photos
+            if (!user.Photos.Any(p => p.Id == id)) {
+                return Unauthorized();
+            }
+            // Get photo from repo
+            var photoFromRepo = await _repo.GetPhoto(id);
+            // Check if photo is main photo
+            if (photoFromRepo.IsMain) {
+                return BadRequest("You cannot delete your main photo");
+            }
+
+            // Delete from Cloudinary
+            if (photoFromRepo.PublicId != null) {
+                var deleteParams = new DeletionParams(photoFromRepo.PublicId);
+                var result = _cloudinary.Destroy(deleteParams);
+                // Delete from db if deletion from Cloudinary successful
+                if (result.Result == "ok") {
+                    _repo.Delete(photoFromRepo);
+                }
+            } else {
+                // Delete random user photos
+                _repo.Delete(photoFromRepo);
+            }
+
+            if (await _repo.SaveAll()) {
+                return Ok();
+            }
+
+            return BadRequest("Failed to delete photo");
+        }
     }
 }
