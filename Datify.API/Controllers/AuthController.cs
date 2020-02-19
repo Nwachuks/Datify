@@ -1,14 +1,15 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
 using Datify.API.Data;
 using Datify.API.Dtos;
 using Datify.API.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Datify.API.Controllers {
     // receive data from body and validate requests
@@ -17,9 +18,11 @@ namespace Datify.API.Controllers {
     public class AuthController : ControllerBase {
         private readonly IAuthRepository _repo;
         private readonly IConfiguration _config;
-        public AuthController(IAuthRepository repo, IConfiguration config) {
+        private readonly IMapper _mapper;
+        public AuthController(IAuthRepository repo, IConfiguration config, IMapper mapper) {
             _repo = repo;
             _config = config;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -28,8 +31,8 @@ namespace Datify.API.Controllers {
             userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
             // Check if username exists
-            if(await _repo.UserExists(userForRegisterDto.Username)) {
-                return BadRequest("Username already exists!");
+            if (await _repo.UserExists(userForRegisterDto.Username)) {
+                return BadRequest ("Username already exists!");
             }
 
             // Create new user and register in auth repo
@@ -46,7 +49,7 @@ namespace Datify.API.Controllers {
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto) {
             var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
 
-            if(userFromRepo == null) {
+            if (userFromRepo == null) {
                 // Ensure client is not sure if username or password is correct
                 return Unauthorized();
             }
@@ -58,7 +61,7 @@ namespace Datify.API.Controllers {
             };
 
             // Create key to sign token
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes (_config.GetSection ("AppSettings:Token").Value));
 
             // Encrypt key
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
@@ -72,12 +75,15 @@ namespace Datify.API.Controllers {
 
             // Use to create token
             var tokenHandler = new JwtSecurityTokenHandler();
-
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            // Write token to response sent back to the client
+            // Get the currently logged in user
+            var user = _mapper.Map<UserForListDto>(userFromRepo);
+
+            // Write token to response sent back to the client and include user with photos
             return Ok(new {
-                token = tokenHandler.WriteToken(token)
+                token = tokenHandler.WriteToken(token),
+                user
             });
         }
     }

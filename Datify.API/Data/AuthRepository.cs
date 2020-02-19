@@ -31,8 +31,8 @@ namespace Datify.API.Data {
         }
 
         public async Task<User> Login (string username, string password) {
-            // Find user in database using username
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
+            // Find user in database using username and include photos as well
+            var user = await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.Username == username);
 
             // If user doesn't exist
             if (user == null) {
