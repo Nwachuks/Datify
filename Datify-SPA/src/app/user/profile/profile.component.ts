@@ -14,6 +14,7 @@ import { AuthService } from '../../_services/auth.service';
 export class ProfileComponent implements OnInit {
   user: User;
   @ViewChild('editForm') editForm: NgForm;
+  photoUrl: string;
 
   // To prevent closing window while making profile edits
   @HostListener('window:beforeunload', ['$event'])
@@ -30,6 +31,8 @@ export class ProfileComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.user = data['user'];
     });
+    // Update profile photo
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   updateUser() {
