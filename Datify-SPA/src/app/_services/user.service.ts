@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 export class UserService {
   baseUrl = environment.apiUrl;
 
-constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.baseUrl + 'users');
@@ -32,6 +32,10 @@ constructor(private http: HttpClient) { }
 
   setMainPhoto(userId: number, id: number) {
     return this.http.post(this.baseUrl + 'users/' + userId + '/photos/' + id + '/setMain', {});
+  }
+
+  deletePhoto(userId: number, id: number) {
+    return this.http.delete(this.baseUrl + 'users/' + userId + '/photos/' + id);
   }
 
 }
