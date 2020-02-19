@@ -42,6 +42,7 @@ namespace Datify.API
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
             services.AddCors();
+            // Configure cloudinary settings helpers with values from app settings
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             // Add AutoMapper for returning specified data
             services.AddAutoMapper(typeof(Startup));
