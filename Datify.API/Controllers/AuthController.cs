@@ -36,14 +36,18 @@ namespace Datify.API.Controllers {
             }
 
             // Create new user and register in auth repo
-            var userToCreate = new User {
-                Username = userForRegisterDto.Username
-            };
+            var userToCreate = _mapper.Map<User>(userForRegisterDto);
+            // var userToCreate = new User {
+            //     Username = userForRegisterDto.Username
+            // };
 
+            // Create and store user, password hash and password salt in db
             var createdUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
-
-            return StatusCode(201);
-        }
+            // Return the registered user with specified properties from the db
+            var userToReturn = _mapper.Map<UserForDetailedDto>(createdUser);
+            
+            return CreatedAtRoute("GetUser", new { controller = "Users", id = createdUser.Id }, userToReturn);
+        } 
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto) {

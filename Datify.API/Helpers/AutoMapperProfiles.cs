@@ -28,9 +28,14 @@ namespace Datify.API.Helpers
                 });
             // Map photo collection for each user
             CreateMap<Photo, PhotosForDetailedDto>();
+            // Map the updated details to the user
             CreateMap<UserForUpdateDto, User>();
+            // Map the photo to the specified details to return
             CreateMap<Photo, PhotoForReturnDto>();
+            // Map the created photo properties to photo
             CreateMap<PhotoForCreationDto, Photo>();
+            // Map the registered user details to user
+            CreateMap<UserForRegisterDto, User>();
         }
     }
 }
