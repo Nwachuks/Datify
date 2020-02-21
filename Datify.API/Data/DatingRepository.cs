@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,15 @@ namespace Datify.API.Data {
             users = users.Where(u => u.Id != userParams.UserId);
             // Filter out same gender - return opposite gender
             users = users.Where(u => u.Gender == userParams.Gender);
+            // Filter out by age
+            if (userParams.MinAge != 18 || userParams.MaxAge != 99) {
+                // Find the lowest year of birth to be returned i.e oldest
+                var minDOB = DateTime.Today.AddYears(-userParams.MaxAge - 1);
+                // Find the highest year of birth to be returned i.e youngest
+                var maxDOB = DateTime.Today.AddYears(-userParams.MinAge);
+
+                users = users.Where(u => u.DateOfBirth >= minDOB && u.DateOfBirth <= maxDOB);
+            }
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 
