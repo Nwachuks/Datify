@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Datify.API.Helpers;
 using Datify.API.Models;
 using System.Linq;
 
@@ -35,9 +36,9 @@ namespace Datify.API.Data {
             return user;
         }
 
-        public async Task<IEnumerable<User>> GetUsers () {
-            var users = await _context.Users.Include(p => p.Photos).ToListAsync();
-            return users;
+        public async Task<PagedList<User>> GetUsers (UserParams userParams) {
+            var users = _context.Users.Include(p => p.Photos);
+            return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 
         public async Task<bool> SaveAll () {
