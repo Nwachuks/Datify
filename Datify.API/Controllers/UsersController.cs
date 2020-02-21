@@ -5,10 +5,12 @@ using System.Security.Claims;
 using AutoMapper;
 using Datify.API.Data;
 using Datify.API.Dtos;
+using Datify.API.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Datify.API.Controllers {
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [ApiController]
     [Route("[controller]")]
