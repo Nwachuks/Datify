@@ -13,7 +13,7 @@
     <!-- General info -->
     <div class="col-sm-4">
       <div class="card">
-        <img src="{{ photoUrl }}" alt="{{ user.fullName }}" class="card-img-top img-thumbnail">
+        <img src="{{ photoUrl || '../../../assets/user.png' }}" alt="{{ user.fullName }}" class="card-img-top img-thumbnail">
         <div class="card-body">
           <div>
             <strong>Location:</strong>

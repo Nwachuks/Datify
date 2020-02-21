@@ -10,7 +10,7 @@
     <!-- General info -->
     <div class="col-sm-4">
       <div class="card">
-        <img src="{{ user.photoUrl }}" alt="{{ user.fullName }}" class="card-img-top img-thumbnail">
+        <img src="{{ user.photoUrl || '../../../assets/user.png' }}" alt="{{ user.fullName }}" class="card-img-top img-thumbnail">
         <div class="card-body">
           <div>
             <strong>Location:</strong>

@@ -1,8 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { BsDatepickerConfig } from 'ngx-bootstrap';
+import { User } from '../_models/user';
 import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-register',
@@ -11,11 +13,11 @@ import { BsDatepickerConfig } from 'ngx-bootstrap';
 })
 export class RegisterComponent implements OnInit {
   @Output() registerCancel = new EventEmitter();
-  model: any = {};
+  user: User;
   registerForm: FormGroup;
   bsConfig: Partial<BsDatepickerConfig>;
 
-  constructor(private authService: AuthService, private alertify: AlertifyService, private fb: FormBuilder) { }
+  constructor(private authService: AuthService, private alertify: AlertifyService, private fb: FormBuilder, private router: Router) { }
 
   ngOnInit() {
     this.bsConfig = {
@@ -47,12 +49,25 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this.authService.register(this.model).subscribe(() => {
-      this.alertify.success('Registration successful');
-    }, error => {
-      this.alertify.error('Error in Registration');
-      console.log(error);
-    });
+    if (this.registerForm.valid) {
+      // Clone object and assign it to user
+      this.user = Object.assign({}, this.registerForm.value);
+      this.authService.register(this.user).subscribe(() => {
+        this.alertify.success('Registration successful!');
+      }, error => {
+        this.alertify.error(error);
+      }, () => {
+        this.authService.login(this.user).subscribe(() => {
+          this.router.navigate(['/matches']);
+        });
+      });
+    }
+    // this.authService.register(this.model).subscribe(() => {
+    //   this.alertify.success('Registration successful');
+    // }, error => {
+    //   this.alertify.error('Error in Registration');
+    //   console.log(error);
+    // });
     // console.log(this.model);
   }
 
