@@ -11,7 +11,19 @@ import { Pagination, PaginatedResult } from '../../_models/pagination';
   styleUrls: ['./matches-list.component.css']
 })
 export class MatchesListComponent implements OnInit {
+  user: User = JSON.parse(localStorage.getItem('user'));
   users: User[];
+  genderList = [
+    {
+      value: 'male',
+      display: 'Men'
+    },
+    {
+      value: 'female',
+      display: 'Women'
+    }
+  ];
+  userParams: any = {};
   pagination: Pagination;
 
   constructor(private userService: UserService, private alertify: AlertifyService, private route: ActivatedRoute) { }
@@ -23,6 +35,10 @@ export class MatchesListComponent implements OnInit {
       this.users = data['users'].result;
       this.pagination = data['users'].pagination;
     });
+
+    this.userParams.gender = this.user.gender === 'female' ? 'male' : 'female';
+    this.userParams.minAge = 18;
+    this.userParams.maxAge = 99;
   }
 
   pageChanged(event: any): void {
@@ -30,8 +46,15 @@ export class MatchesListComponent implements OnInit {
     this.loadUsers();
   }
 
+  resetFilters() {
+    this.userParams.gender = this.user.gender === 'female' ? 'male' : 'female';
+    this.userParams.minAge = 18;
+    this.userParams.maxAge = 99;
+    this.loadUsers();
+  }
+
   loadUsers() {
-    this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage)
+    this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams)
       .subscribe((res: PaginatedResult<User[]>) => {
       this.users = res.result;
       this.pagination = res.pagination;
