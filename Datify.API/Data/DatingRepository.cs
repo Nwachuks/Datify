@@ -37,7 +37,11 @@ namespace Datify.API.Data {
         }
 
         public async Task<PagedList<User>> GetUsers (UserParams userParams) {
-            var users = _context.Users.Include(p => p.Photos);
+            var users = _context.Users.Include(p => p.Photos).AsQueryable();
+            // Filter out the current logged in user
+            users = users.Where(u => u.Id != userParams.UserId);
+            // Filter out same gender - return opposite gender
+            users = users.Where(u => u.Gender == userParams.Gender);
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 

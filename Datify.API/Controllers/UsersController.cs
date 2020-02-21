@@ -24,6 +24,17 @@ namespace Datify.API.Controllers {
 
         [HttpGet]
         public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams) {
+            // Get current logged in user id
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Get user from db
+            var userFromRepo = await _repo.GetUser(currentUserId);
+            // Set user userid to filter out current user
+            userParams.UserId = currentUserId;
+            if (string.IsNullOrEmpty(userParams.Gender)) {
+                // Set user gender to opposite of gender to filter out by gender    
+                userParams.Gender = userFromRepo.Gender == "male" ? "female" : "male";
+            }
+            // Get users
             var users = await _repo.GetUsers(userParams);
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
             Response.AddPagination(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
