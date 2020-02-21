@@ -3,7 +3,6 @@
 </div>
 
 <div class="container mt-3">
-
   <form class="form-inline" #form="ngForm" (ngSubmit)="loadUsers()" novalidate>
     <div class="form-group">
       <label for="minAge">Age From:</label>
@@ -27,8 +26,17 @@
     </div>
     <button type="submit" class="btn btn-primary" style="margin-left:10px">Apply Filters</button>
     <button type="button" class="btn btn-info" style="margin-left:10px" (click)="resetFilters()">Reset Filter</button>
-
   </form>
+
+  <div class="col">
+    <div class="btn-group float-right">
+      <button type="button" name="orderBy" class="btn btn-primary" btnRadio="lastActive" [(ngModel)]="userParams.orderBy"
+        (click)="loadUsers()">Last Active</button>
+      <button type="button" name="orderBy" class="btn btn-primary" btnRadio="created" [(ngModel)]="userParams.orderBy"
+        (click)="loadUsers()">Newest</button>
+    </div>
+  </div>
+
   <br>
   <br>
 
