@@ -38,7 +38,8 @@ namespace Datify.API.Data {
         }
 
         public async Task<PagedList<User>> GetUsers (UserParams userParams) {
-            var users = _context.Users.Include(p => p.Photos).AsQueryable();
+            // Order users default by most recent users
+            var users = _context.Users.Include(p => p.Photos).OrderByDescending(u => u.LastActive).AsQueryable();
             // Filter out the current logged in user
             users = users.Where(u => u.Id != userParams.UserId);
             // Filter out same gender - return opposite gender
@@ -52,6 +53,20 @@ namespace Datify.API.Data {
 
                 users = users.Where(u => u.DateOfBirth >= minDOB && u.DateOfBirth <= maxDOB);
             }
+
+            // Order by created if specified
+            if (!string.IsNullOrEmpty(userParams.OrderBy)) {
+                switch (userParams.OrderBy)
+                {
+                    case "created":
+                        users = users.OrderByDescending(u => u.Created);
+                        break;
+                    default:
+                        users = users.OrderByDescending(u => u.LastActive);
+                        break;
+                }
+            }
+
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 
