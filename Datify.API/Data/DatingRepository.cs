@@ -45,10 +45,29 @@ namespace Datify.API.Data {
         public async Task<PagedList<User>> GetUsers (UserParams userParams) {
             // Order users default by most recent users
             var users = _context.Users.Include(p => p.Photos).OrderByDescending(u => u.LastActive).AsQueryable();
+
             // Filter out the current logged in user
             users = users.Where(u => u.Id != userParams.UserId);
+
             // Filter out same gender - return opposite gender
             users = users.Where(u => u.Gender == userParams.Gender);
+
+            // Return list of user likers - those who have liked the user
+            if (userParams.Likers) {
+                // Get list of users' id that like user
+                var userLikers = await GetUserLikes(userParams.UserId, userParams.Likers);
+                // Get users with those id in db
+                users = users.Where(u => userLikers.Contains(u.Id));
+            }
+ 
+            // Return list of user likees - those who have been like by the user
+            if (userParams.Likees) {
+                // Get list of users' id that user likes
+                var userLikees = await GetUserLikes(userParams.UserId, userParams.Likers);
+                // Get users with those id in db
+                users = users.Where(u => userLikees.Contains(u.Id));
+            }
+
             // Filter out by age
             if (userParams.MinAge != 18 || userParams.MaxAge != 99) {
                 // Find the lowest year of birth to be returned i.e oldest
@@ -77,6 +96,19 @@ namespace Datify.API.Data {
 
         public async Task<bool> SaveAll () {
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        private async Task<IEnumerable<int>> GetUserLikes(int id, bool likers) {
+            // Get user including list of likers and likees
+            var user = await _context.Users.Include(x => x.Likers).Include(x => x.Likees).FirstOrDefaultAsync(u => u.Id == id);
+
+            if (likers) {
+                // Return a list of the user's likers' id
+                return user.Likers.Where(u => u.LikeeId == id).Select(i => i.LikerId);
+            } else {
+                // Return a list of the user's likees' id
+                return user.Likees.Where(u => u.LikerId == id).Select(i => i.LikeeId);
+            }
         }
     }
 }
