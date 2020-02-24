@@ -8,6 +8,7 @@ using Datify.API.Dtos;
 using Datify.API.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Datify.API.Models;
 
 namespace Datify.API.Controllers {
     [ServiceFilter(typeof(LogUserActivity))]
@@ -62,6 +63,38 @@ namespace Datify.API.Controllers {
             }
 
             throw new Exception($"Updating user {id} failed on save");
+        }
+
+        [HttpPost("{id}/like/{recipientId}")]
+        public async Task<IActionResult> LikeUser(int id, int recipientId) {
+            // Check if user is logged in (using token)
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+                return Unauthorized();
+            }
+
+            // Check if likee exists
+            if (await _repo.GetUser(recipientId) == null) {
+                return NotFound();
+            }
+
+            // Check if liker has already liked likee
+            var like = await _repo.GetLike(id, recipientId);
+            if (like != null) {
+                return BadRequest("You already liked this user");
+            }
+
+            // Create like
+            like = new Like {
+                LikerId = id,
+                LikeeId = recipientId
+            };
+            _repo.Add<Like>(like);
+
+            if (await _repo.SaveAll()) {
+                return Ok();
+            }
+
+            return BadRequest("Failed to like user");
         }
     }
 }
