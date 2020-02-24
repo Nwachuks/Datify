@@ -12,6 +12,7 @@ import { AuthGuard } from './_guards/auth.guard';
 import { MatchDetailResolver } from './_resolvers/match-detail.resolver';
 import { MatchListResolver } from './_resolvers/match-list.resolver';
 import { ProfileResolver } from './_resolvers/profile.resolver';
+import { LikesResolver } from './_resolvers/likes.resolver';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
 
 const routes: Routes = [
@@ -27,7 +28,7 @@ const routes: Routes = [
         path: 'profile', component: ProfileComponent, resolve: { user: ProfileResolver },
         canDeactivate: [PreventUnsavedChangesGuard]
       },
-      { path: 'likes', component: LikesListComponent },
+      { path: 'likes', component: LikesListComponent, resolve: { users: LikesResolver } },
       { path: 'messages', component: MessagesComponent },
     ]
   },
