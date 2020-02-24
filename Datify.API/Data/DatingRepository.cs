@@ -94,6 +94,18 @@ namespace Datify.API.Data {
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 
+        public async Task<Message> GetMessage(int id) {
+            return await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public Task<PagedList<Message>> GetMessagesForUser() {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId) {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> SaveAll () {
             return await _context.SaveChangesAsync() > 0;
         }

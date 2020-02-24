@@ -36,6 +36,8 @@ namespace Datify.API.Helpers
             CreateMap<PhotoForCreationDto, Photo>();
             // Map the registered user details to user
             CreateMap<UserForRegisterDto, User>();
+            // Map created message to message
+            CreateMap<MessageForCreationDto, Message>().ReverseMap();
         }
     }
 }
