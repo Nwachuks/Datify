@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Datify.API.Controllers {
     [ServiceFilter (typeof (LogUserActivity))]
@@ -39,6 +40,40 @@ namespace Datify.API.Controllers {
 
             return Ok(messageFromRepo);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMessagesForUser(int userId, [FromQuery]MessageParams messageParams) {
+            // Check if user is authorized
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+                return Unauthorized();
+            }
+
+            messageParams.UserId = userId;
+
+            // Get messages
+            var messagesFromRepo = await _repo.GetMessagesForUser(messageParams);
+            var messages = _mapper.Map<IEnumerable<MessageToReturnDto>>(messagesFromRepo);
+            
+            // Add pagination to response header
+            Response.AddPagination(messagesFromRepo.CurrentPage, messagesFromRepo.PageSize,
+                messagesFromRepo.TotalCount, messagesFromRepo.TotalPages);
+
+            return Ok(messages);
+        }
+
+        [HttpGet("thread/{recipientId}")]
+        public async Task<IActionResult> GetMessageThread(int userId, int recipientId) {
+            // Check if user is authorized
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+                return Unauthorized();
+            }
+
+            var messagesFromRepo = await _repo.GetMessageThread(userId, recipientId);
+            var messageThread = _mapper.Map<IEnumerable<MessageToReturnDto>>(messagesFromRepo);
+
+            return Ok(messageThread);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateMessage(int userId, MessageForCreationDto messageForCreationDto) {
