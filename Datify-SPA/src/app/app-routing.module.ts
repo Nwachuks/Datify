@@ -14,6 +14,7 @@ import { MatchListResolver } from './_resolvers/match-list.resolver';
 import { ProfileResolver } from './_resolvers/profile.resolver';
 import { LikesResolver } from './_resolvers/likes.resolver';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
+import { MessagesResolver } from './_resolvers/messages.resolver';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -29,7 +30,7 @@ const routes: Routes = [
         canDeactivate: [PreventUnsavedChangesGuard]
       },
       { path: 'likes', component: LikesListComponent, resolve: { users: LikesResolver } },
-      { path: 'messages', component: MessagesComponent },
+      { path: 'messages', component: MessagesComponent, resolve: { messages: MessagesResolver } },
     ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }

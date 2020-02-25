@@ -31,6 +31,7 @@ import { MatchDetailResolver } from './_resolvers/match-detail.resolver';
 import { MatchListResolver } from './_resolvers/match-list.resolver';
 import { ProfileResolver } from './_resolvers/profile.resolver';
 import { LikesResolver } from './_resolvers/likes.resolver';
+import { MessagesResolver } from './_resolvers/messages.resolver';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -81,7 +82,8 @@ export function tokenGetter() {
     MatchDetailResolver,
     MatchListResolver,
     ProfileResolver,
-    LikesResolver
+    LikesResolver,
+    MessagesResolver
   ],
   bootstrap: [
     AppComponent
