@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
+import { TabsetComponent } from 'ngx-bootstrap';
 import { User } from './../../_models/user';
 import { AlertifyService } from './../../_services/alertify.service';
 import { UserService } from './../../_services/user.service';
@@ -14,6 +15,7 @@ export class MatchDetailComponent implements OnInit {
   user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
+  @ViewChild('matchTabs') matchTabs: TabsetComponent;
 
   constructor(private userService: UserService, private alertify: AlertifyService, private route: ActivatedRoute) { }
 
@@ -22,6 +24,11 @@ export class MatchDetailComponent implements OnInit {
     // Use resolvers to load data for user before component is loaded
     this.route.data.subscribe(data => {
       this.user = data['user'];
+    });
+
+    this.route.queryParams.subscribe(params => {
+      const selectedTab = params['tab'];
+      this.matchTabs.tabs[selectedTab > 0 ? selectedTab : 0].active = true;
     });
 
     this.galleryOptions = [
@@ -58,4 +65,7 @@ export class MatchDetailComponent implements OnInit {
     return imageUrls;
   }
 
+  selectTab(tabId: number) {
+    this.matchTabs.tabs[tabId].active = true;
+  }
 }

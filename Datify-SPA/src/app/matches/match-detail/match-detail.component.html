@@ -32,7 +32,7 @@
         <div class="card-footer">
           <div class="btn-group d-flex">
             <button class="btn btn-primary w-100">Like</button>
-            <button class="btn btn-success w-100">Message</button>
+            <button class="btn btn-success w-100" (click)="selectTab(3)">Message</button>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
     <!-- Specific info -->
     <div class="col-sm-8">
       <div class="tab-panel">
-        <tabset class="match-tabset">
+        <tabset class="match-tabset" #matchTabs>
           <tab heading="About {{ user.username | titlecase }}">
             <h4>Description</h4>
             <p>{{ user.introduction }}</p>
