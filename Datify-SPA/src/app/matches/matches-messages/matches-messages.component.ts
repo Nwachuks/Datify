@@ -11,6 +11,7 @@ import { AlertifyService } from './../../_services/alertify.service';
 })
 export class MatchesMessagesComponent implements OnInit {
   @Input() recipientId: number;
+  @Input() username: string;
   messages: Message[];
 
   constructor(private userService: UserService, private authService: AuthService, private alertify: AlertifyService) { }

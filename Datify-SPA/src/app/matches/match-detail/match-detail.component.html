@@ -55,7 +55,7 @@
             <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
           </tab>
           <tab heading="Messages">
-            <app-matches-messages [recipientId]="user.id"></app-matches-messages>
+            <app-matches-messages [recipientId]="user.id" [username]="user.username"></app-matches-messages>
           </tab>
         </tabset>
       </div>
