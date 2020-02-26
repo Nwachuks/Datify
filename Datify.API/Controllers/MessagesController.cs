@@ -77,8 +77,9 @@ namespace Datify.API.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> CreateMessage(int userId, MessageForCreationDto messageForCreationDto) {
+            var sender = await _repo.GetUser(userId);
             // Check if user is logged in
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+            if (sender.Id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
                 return Unauthorized();
             }
 
@@ -95,9 +96,8 @@ namespace Datify.API.Controllers {
             var message = _mapper.Map<Message>(messageForCreationDto);
             _repo.Add(message);
 
-            var messageToReturn = _mapper.Map<MessageForCreationDto>(message);
-
             if (await _repo.SaveAll()) {
+                var messageToReturn = _mapper.Map<MessageToReturnDto>(message);
                 return CreatedAtRoute("GetMessage", new { userId, id = message.Id }, messageToReturn);
             }
 

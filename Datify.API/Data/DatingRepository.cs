@@ -125,7 +125,7 @@ namespace Datify.API.Data {
                 .Include(u => u.Recipient).ThenInclude(p => p.Photos)
                 .Where(m => m.RecipientId == userId && m.SenderId == recipientId 
                     || m.RecipientId == recipientId && m.SenderId == userId)
-                .OrderByDescending(m => m.MessageSent).ToListAsync();
+                .OrderBy(m => m.MessageSent).ToListAsync();
 
             return messages;
         }
