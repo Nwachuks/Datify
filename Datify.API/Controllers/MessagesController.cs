@@ -103,5 +103,36 @@ namespace Datify.API.Controllers {
 
             throw new Exception("Creating the message failed on save");
         }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> DeleteMessage(int id, int userId) {
+            // Check if user is authorized
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+                return Unauthorized();
+            }
+
+            var messageFromRepo = await _repo.GetMessage(id);
+
+            // Sender deletes message
+            if (messageFromRepo.SenderId == userId) {
+                messageFromRepo.SenderDeleted = true;
+            }
+
+            // Recipient deletes message
+            if (messageFromRepo.RecipientId == userId) {
+                messageFromRepo.RecipientDeleted = true;
+            }
+
+            // Delete if both sender and recipient have deleted message
+            if (messageFromRepo.SenderDeleted && messageFromRepo.RecipientDeleted) {
+                _repo.Delete(messageFromRepo);
+            }
+
+            if (await _repo.SaveAll()) {
+                return NoContent();
+            }
+
+            throw new Exception("Error deleting the message");
+        }
     }
 }
