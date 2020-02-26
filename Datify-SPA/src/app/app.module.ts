@@ -20,6 +20,7 @@ import { MatchCardComponent } from './matches/match-card/match-card.component';
 import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { PhotoEditorComponent } from './user/photo-editor/photo-editor.component';
+import { MatchesMessagesComponent } from './matches/matches-messages/matches-messages.component';
 
 import { AuthService } from './_services/auth.service';
 import { AlertifyService } from './_services/alertify.service';
@@ -49,7 +50,8 @@ export function tokenGetter() {
     MessagesComponent,
     ProfileComponent,
     PhotoEditorComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    MatchesMessagesComponent
   ],
   imports: [
     BrowserModule,
