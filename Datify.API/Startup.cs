@@ -95,6 +95,10 @@ namespace Datify.API
 
             app.UseAuthentication();
 
+            app.UseDefaultFiles();
+
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthorization();
