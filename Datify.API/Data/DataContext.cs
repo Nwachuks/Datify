@@ -1,10 +1,13 @@
-using Microsoft.EntityFrameworkCore;
 using Datify.API.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Datify.API.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole,
+        IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public DataContext(DbContextOptions<DataContext> options) : base (options) { }
 
@@ -17,6 +20,16 @@ namespace Datify.API.Data
         public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
+            base.OnModelCreating(builder);
+            builder.Entity<UserRole>(userRole => {
+                // Set combination of userid and roleid as primary key
+                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
+                // One role can be associated with many users
+                userRole.HasOne(ur => ur.Role).WithMany(r => r.UserRoles).HasForeignKey(ur => ur.RoleId).IsRequired();
+                // One user can have many user roles
+                userRole.HasOne(ur => ur.User).WithMany(r => r.UserRoles).HasForeignKey(ur => ur.UserId).IsRequired();
+            })
+
             // Set combination of likerid and likeeid as primary key
             builder.Entity<Like>()
                 .HasKey(k => new { k.LikerId, k.LikeeId });
